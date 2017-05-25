@@ -32,7 +32,7 @@ public class ArrayListTest {
      */
     @Test
     public void list_constructor_works_and_initializes_a_list_of_size_zero() {
-        ArrayList emptyList = new ArrayList();
+        List emptyList = new ArrayList();
         assertEquals(0, emptyList.size());
     }
 
@@ -118,7 +118,7 @@ public class ArrayListTest {
      */
     @Test
     public void function_size_returns_1_after_adding_an_item_into_a_new_list_at_index_zero() {
-        ArrayList newList = new ArrayList();
+        List newList = new ArrayList();
         String newValue = "Test 123";
         newList.add(0, newValue);
         assertEquals(1, newList.size());
@@ -126,7 +126,7 @@ public class ArrayListTest {
     
     @Test
     public void function_get_returns_correct_value_after_adding_an_item_into_a_new_list_at_index_zero() {
-        ArrayList newList = new ArrayList();
+        List newList = new ArrayList();
         String newValue = "Test 123";
         newList.add(0, newValue);
         assertEquals(newValue, newList.get(0));
