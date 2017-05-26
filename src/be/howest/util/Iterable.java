@@ -9,7 +9,7 @@ package be.howest.util;
  *
  * @author Hayk
  */
-public interface Iterable<V> {
+public interface Iterable<V> extends List<V> {
     void addFirst(V value);
     void addLast(V value);
     V removeFirst();

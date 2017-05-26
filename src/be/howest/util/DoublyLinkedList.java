@@ -9,7 +9,7 @@ package be.howest.util;
  *
  * @author Hayk
  */
-public final class DoublyLinkedList<V> implements List<V>, Iterable<V> {
+public final class DoublyLinkedList<V> implements Iterable<V> {
 
     @Override
     public int size() {
