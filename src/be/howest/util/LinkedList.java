@@ -76,10 +76,7 @@ public final class LinkedList<V> implements List<V> {
 
     @Override
     public void remove(int index) {
-        int size = size();
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException();
-        }
+        validateBounds(index, 0, size() - 1);
         if (head != null) {
             Node<V> current = getNodeAt(index);
             current.next = current.next.next;
