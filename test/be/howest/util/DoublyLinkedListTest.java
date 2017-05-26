@@ -410,6 +410,16 @@ public class DoublyLinkedListTest {
     }
     
     @Test
+    public void forwardStringVersionOfList_returns_correctValue_of_a_list_containing_2_items() {
+        String value1 = "Test 123";
+        String value2 = "Test 456";
+        Iterable list = new DoublyLinkedList();
+        list.add(value1);
+        list.add(value2);
+        assertEquals(value1 + "\n" + value2, list.forwardStringVersionOfList());
+    }
+    
+    @Test
     public void forwardStringVersionOfList_returns_correctValue_of_a_list_containing_3_items() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < listWith3Items.size() - 1; i++) {
@@ -431,6 +441,16 @@ public class DoublyLinkedListTest {
         Iterable list = new DoublyLinkedList();
         list.add(value);
         assertEquals(value, list.backwardStringVersionOfList());
+    }
+    
+    @Test
+    public void backwardStringVersionOfList_returns_correctValue_of_a_list_containing_2_items() {
+        String value1 = "Test 123";
+        String value2 = "Test 456";
+        Iterable list = new DoublyLinkedList();
+        list.add(value1);
+        list.add(value2);
+        assertEquals(value2 + "\n" + value1, list.backwardStringVersionOfList());
     }
     
     @Test
