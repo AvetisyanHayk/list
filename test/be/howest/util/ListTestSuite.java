@@ -15,7 +15,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
     ArrayListTest.class,
-    LinkedListTest.class
+    LinkedListTest.class,
+    DoublyLinkedListTest.class
 })
 public class ListTestSuite {
     
