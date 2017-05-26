@@ -44,12 +44,6 @@ public class LinkedListTest {
         List emptyList = new LinkedList();
         assertEquals(0, emptyList.size());
     }
-    
-    @Test
-    public void first_item_of_a_new_list_is_null() {
-        List emptyList = new LinkedList();
-        assertEquals(null, emptyList.get(0));
-    }
 
     @Test
     public void function_size_returns_3_for_a_list_containing_3_items() {
