@@ -14,6 +14,6 @@ public interface Iterable<V> extends List<V> {
     void addLast(V value);
     V removeFirst();
     V removeLast();
-    V forwardStringVersionOfList();
-    V backwardStringVersionOfList();
+    String forwardStringVersionOfList();
+    String backwardStringVersionOfList();
 }

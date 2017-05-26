@@ -165,10 +165,24 @@ public class DoublyLinkedListTest {
     }
     
     @Test
+    public void function_get_returns_correct_value_after_adding_an_item_value_at_first_index_into_a_list_containing_3_items_using_function_addFirst() {
+        String newValue = "Test 123";
+        listWith3Items.addFirst(newValue);
+        assertEquals(newValue, listWith3Items.get(0));
+    }
+    
+    @Test
     public void function_size_returns_4_after_adding_an_item_value_at_last_index_into_a_list_containing_3_items_using_function_addLast() {
         String newValue = "Test 123";
         listWith3Items.addLast(newValue);
         assertEquals(4, listWith3Items.size());
+    }
+    
+    @Test
+    public void function_get_returns_correct_value_after_adding_an_item_value_at_first_index_into_a_list_containing_3_items_using_function_addLast() {
+        String newValue = "Test 123";
+        listWith3Items.addLast(newValue);
+        assertEquals(newValue, listWith3Items.get(4));
     }
 
     /**
@@ -185,6 +199,32 @@ public class DoublyLinkedListTest {
         listWith3Items.remove(1);
         assertEquals(createListItem(0), listWith3Items.get(0));
         assertEquals(createListItem(2), listWith3Items.get(1));
+    }
+    
+    @Test
+    public void function_size_returns_2_after_removing_first_item_from_a_list_containing_3_items_using_function_removeFirst() {
+        listWith3Items.removeFirst();
+        assertEquals(2, listWith3Items.size());
+    }
+    
+    @Test
+    public void function_get_returns_correct_value_after_removing_first_item_from_a_list_containing_3_items_using_removeFirst() {
+        listWith3Items.removeFirst();
+        assertEquals(createListItem(1), listWith3Items.get(0));
+        assertEquals(createListItem(2), listWith3Items.get(1));
+    }
+    
+    @Test
+    public void function_size_returns_2_after_removing_last_item_from_a_list_containing_3_items_using_function_removeLast() {
+        listWith3Items.removeLast();
+        assertEquals(2, listWith3Items.size());
+    }
+    
+    @Test
+    public void function_get_returns_correct_value_after_removing_last_item_from_a_list_containing_3_items_using_removeLast() {
+        listWith3Items.removeLast();
+        assertEquals(createListItem(0), listWith3Items.get(0));
+        assertEquals(createListItem(1), listWith3Items.get(1));
     }
 
     /**
@@ -234,7 +274,6 @@ public class DoublyLinkedListTest {
     /**
      * REMOVE ALL ITEMS BY VALUE
      */
-    
     @Test
     public void function_size_returns_95_after_removing_all_5_items_having_same_value_from_a_list_containing_100_values_using_function_removeAll() {
         int amount = 100;
@@ -351,5 +390,56 @@ public class DoublyLinkedListTest {
         String newValue = "Test 123";
         listWith3Items.add(-1, newValue);
         listWith3Items.add(4, newValue);
+    }
+    
+    /**
+     * STRING VERSIONS OF LIST
+     */
+    @Test
+    public void forwardStringVersionOfList_returns_empty_string_for_a_empty_list() {
+        Iterable list = new DoublyLinkedList();
+        assertEquals("", list.forwardStringVersionOfList());
+    }
+    
+    @Test
+    public void forwardStringVersionOfList_returns_correctValue_of_a_list_containing_1_item() {
+        String value = "Test 123";
+        Iterable list = new DoublyLinkedList();
+        list.add(value);
+        assertEquals(value, list.forwardStringVersionOfList());
+    }
+    
+    @Test
+    public void forwardStringVersionOfList_returns_correctValue_of_a_list_containing_3_items() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < listWith3Items.size() - 1; i++) {
+            sb.append(listWith3Items.get(i)).append("\n");
+        }
+        sb.append(listWith3Items.get(listWith3Items.size() - 1));
+        assertEquals(sb.toString(), listWith3Items.forwardStringVersionOfList());
+    }
+    
+    @Test
+    public void backwardStringVersionOfList_returns_empty_string_for_a_empty_list() {
+        Iterable list = new DoublyLinkedList();
+        assertEquals("", list.backwardStringVersionOfList());
+    }
+    
+    @Test
+    public void backwardStringVersionOfList_returns_correctValue_of_a_list_containing_1_item() {
+        String value = "Test 123";
+        Iterable list = new DoublyLinkedList();
+        list.add(value);
+        assertEquals(value, list.backwardStringVersionOfList());
+    }
+    
+    @Test
+    public void backwardStringVersionOfList_returns_correctValue_of_a_list_containing_3_items() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = listWith3Items.size() - 1; i >= 1; i--) {
+            sb.append(listWith3Items.get(i)).append("\n");
+        }
+        sb.append(listWith3Items.get(0));
+        assertEquals(sb.toString(), listWith3Items.backwardStringVersionOfList());
     }
 }

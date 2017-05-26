@@ -82,12 +82,12 @@ public final class DoublyLinkedList<V> implements Iterable<V> {
     }
 
     @Override
-    public V forwardStringVersionOfList() {
+    public String forwardStringVersionOfList() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public V backwardStringVersionOfList() {
+    public String backwardStringVersionOfList() {
         throw new UnsupportedOperationException();
     }
     
