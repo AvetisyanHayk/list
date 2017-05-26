@@ -182,7 +182,7 @@ public class DoublyLinkedListTest {
     public void function_get_returns_correct_value_after_adding_an_item_value_at_first_index_into_a_list_containing_3_items_using_function_addLast() {
         String newValue = "Test 123";
         listWith3Items.addLast(newValue);
-        assertEquals(newValue, listWith3Items.get(4));
+        assertEquals(newValue, listWith3Items.get(3));
     }
 
     /**
