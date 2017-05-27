@@ -1,8 +1,8 @@
 package be.howest.util;
 
-public final class ArrayList<V> implements List<V> {
+public final class ArrayList<E> implements List<E> {
 
-    private V[] items;
+    private E[] elements;
     private int size;
     private static final int STEP = 10;
 
@@ -16,9 +16,9 @@ public final class ArrayList<V> implements List<V> {
     }
 
     @Override
-    public int indexOf(V value) {
+    public int indexOf(E element) {
         for (int i = 0; i < size; i++) {
-            if (value.equals(items[i])) {
+            if (element.equals(elements[i])) {
                 return i;
             }
         }
@@ -26,32 +26,32 @@ public final class ArrayList<V> implements List<V> {
     }
 
     @Override
-    public V get(int index) {
-        return items[index];
+    public E get(int index) {
+        return elements[index];
     }
 
     @Override
-    public void set(int index, V newValue) {
-        items[index] = newValue;
+    public void set(int index, E element) {
+        elements[index] = element;
     }
 
     @Override
-    public void add(V value) {
+    public void add(E element) {
         ensureCapacity(true);
-        items[size] = value;
+        elements[size] = element;
         size++;
     }
 
     @Override
-    public void add(int index, V newValue) {
+    public void add(int index, E element) {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException();
         }
         ensureCapacity(true);
         for (int i = size; i > index; i--) {
-            set(i, items[i - 1]);
+            set(i, elements[i - 1]);
         }
-        set(index, newValue);
+        set(index, element);
         size++;
     }
 
@@ -62,7 +62,7 @@ public final class ArrayList<V> implements List<V> {
         }
         for (int i = index; i < size - 1; i++) {
             if (index < size - 1) {
-                set(i, items[i + 1]);
+                set(i, elements[i + 1]);
             } else {
                 set(i, null);
                 ensureCapacity(false);
@@ -72,8 +72,8 @@ public final class ArrayList<V> implements List<V> {
     }
 
     @Override
-    public boolean remove(V value) {
-        int index = indexOf(value);
+    public boolean remove(E element) {
+        int index = indexOf(element);
         if (index >= 0) {
             remove(index);
         }
@@ -81,34 +81,34 @@ public final class ArrayList<V> implements List<V> {
     }
 
     @Override
-    public boolean removeAll(V value) {
-        int index = indexOf(value);
+    public boolean removeAll(E element) {
+        int index = indexOf(element);
         boolean removed = false;
         while (index >= 0) {
-            removed = remove(value);
-            index = indexOf(value);
+            removed = remove(element);
+            index = indexOf(element);
         }
         return removed;
     }
 
     @Override
     public void clear() {
-        items = (V[]) new Object[STEP];
+        elements = (E[]) new Object[STEP];
         size = 0;
     }
 
     private void ensureCapacity(boolean toEncrease) {
         if (size % STEP == 0) {
-            V[] copyArray;
+            E[] copyArray;
             if (toEncrease) {
-                copyArray = (V[]) new Object[size + STEP];
+                copyArray = (E[]) new Object[size + STEP];
             } else {
-                copyArray = (V[]) new Object[size - STEP];
+                copyArray = (E[]) new Object[size - STEP];
             }
-            for (int i = 0; i < items.length; i++) {
-                copyArray[i] = items[i];
+            for (int i = 0; i < elements.length; i++) {
+                copyArray[i] = elements[i];
             }
-            items = copyArray;
+            elements = copyArray;
         }
     }
 }

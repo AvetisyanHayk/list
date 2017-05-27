@@ -9,11 +9,11 @@ package be.howest.util;
  *
  * @author Hayk
  */
-public interface Iterable<V> extends List<V> {
-    void addFirst(V value);
-    void addLast(V value);
-    V removeFirst();
-    V removeLast();
+public interface Iterable<E> extends List<E> {
+    void addFirst(E element);
+    void addLast(E element);
+    E removeFirst();
+    E removeLast();
     String forwardStringVersionOfList();
     String backwardStringVersionOfList();
 }

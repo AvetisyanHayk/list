@@ -9,10 +9,10 @@ package be.howest.util;
  *
  * @author Hayk
  */
-public final class DoublyLinkedList<V> implements Iterable<V> {
+public final class DoublyLinkedList<E> implements Iterable<E> {
 
-    private Node<V> head;
-    private Node<V> tail;
+    private Node<E> head;
+    private Node<E> tail;
 
     public DoublyLinkedList() {
         clear();
@@ -21,7 +21,7 @@ public final class DoublyLinkedList<V> implements Iterable<V> {
     @Override
     public int size() {
         int size = 0;
-        Node<V> current = head;
+        Node<E> current = head;
         while (current.next != null) {
             size++;
             current = current.next;
@@ -30,10 +30,10 @@ public final class DoublyLinkedList<V> implements Iterable<V> {
     }
 
     @Override
-    public int indexOf(V value) {
-        Node<V> current = head;
+    public int indexOf(E element) {
+        Node<E> current = head;
         for (int i = 0; i < size(); i++) {
-            if (current.next != null && value.equals(current.next.value)) {
+            if (current.next != null && element.equals(current.next.element)) {
                 return i;
             }
             current = current.next;
@@ -42,39 +42,39 @@ public final class DoublyLinkedList<V> implements Iterable<V> {
     }
 
     @Override
-    public V get(int index) {
+    public E get(int index) {
         validateBounds(index, 0, size());
-        return getNodeAt(index).next.value;
+        return getNodeAt(index).next.element;
     }
 
     @Override
-    public void set(int index, V value) {
+    public void set(int index, E element) {
         validateBounds(index, 0, size() - 1);
         if (size() == 0) {
-            head.next = new Node<>(value);
+            head.next = new Node<>(element);
             tail.previous = head.next;
         } else {
-            getNodeAt(index).next.value = value;
+            getNodeAt(index).next.element = element;
         }
     }
 
     @Override
-    public void add(V value) {
-        Node<V> lastNode = getLastNode();
-        lastNode.next = new Node<>(value);
+    public void add(E element) {
+        Node<E> lastNode = getLastNode();
+        lastNode.next = new Node<>(element);
         tail.previous = lastNode.next;
         tail.previous.previous = lastNode;
     }
 
     @Override
-    public void add(int index, V value) {
+    public void add(int index, E element) {
         validateBounds(index, 0, size());
         if (head == null || index == size()) {
-            add(value);
+            add(element);
         } else {
-            Node<V> current = getNodeAt(index);
-            Node<V> temp = current.next;
-            current.next = new Node<>(value);
+            Node<E> current = getNodeAt(index);
+            Node<E> temp = current.next;
+            current.next = new Node<>(element);
             current.next.next = temp;
         }
     }
@@ -84,7 +84,7 @@ public final class DoublyLinkedList<V> implements Iterable<V> {
         int size = size();
         validateBounds(index, 0, size - 1);
         if (head != null) {
-            Node<V> current = getNodeAt(index);
+            Node<E> current = getNodeAt(index);
             current.next = current.next.next;
             if (index == size - 1) {
                 tail.previous = getLastNode().next;
@@ -93,22 +93,22 @@ public final class DoublyLinkedList<V> implements Iterable<V> {
     }
 
     @Override
-    public boolean remove(V value) {
-        int index = indexOf(value);
+    public boolean remove(E element) {
+        int index = indexOf(element);
         if (index >= 0) {
-            remove(indexOf(value));
+            remove(indexOf(element));
             return true;
         }
         return false;
     }
 
     @Override
-    public boolean removeAll(V value) {
-        int index = indexOf(value);
+    public boolean removeAll(E element) {
+        int index = indexOf(element);
         boolean removed = false;
         while (index >= 0) {
-            removed = remove(value);
-            index = indexOf(value);
+            removed = remove(element);
+            index = indexOf(element);
         }
         return removed;
     }
@@ -120,28 +120,28 @@ public final class DoublyLinkedList<V> implements Iterable<V> {
     }
 
     @Override
-    public void addFirst(V value) {
-        add(0, value);
+    public void addFirst(E element) {
+        add(0, element);
     }
 
     @Override
-    public void addLast(V value) {
-        add(value);
+    public void addLast(E element) {
+        add(element);
     }
 
     @Override
-    public V removeFirst() {
-        V value = get(0);
+    public E removeFirst() {
+        E element = get(0);
         remove(0);
-        return value;
+        return element;
     }
 
     @Override
-    public V removeLast() {
+    public E removeLast() {
         int index = size() - 1;
-        V value = get(index);
+        E element = get(index);
         remove(index);
-        return value;
+        return element;
     }
 
     @Override
@@ -149,14 +149,14 @@ public final class DoublyLinkedList<V> implements Iterable<V> {
         int size = size();
         StringBuilder sb = new StringBuilder();
         if (size == 1) {
-            sb.append(head.next.value);
+            sb.append(head.next.element);
         } else if (size > 1) {
-            Node<V> current = head;
+            Node<E> current = head;
             for (int i = 0; i < size - 1; i++) {
-                sb.append(current.next.value).append("\n");
+                sb.append(current.next.element).append("\n");
                 current = current.next;
             }
-            sb.append(tail.previous.value);
+            sb.append(tail.previous.element);
         }
         return sb.toString();
     }
@@ -166,28 +166,28 @@ public final class DoublyLinkedList<V> implements Iterable<V> {
         int size = size();
         StringBuilder sb = new StringBuilder();
         if (size == 1) {
-            sb.append(tail.previous.value);
+            sb.append(tail.previous.element);
         } else if (size > 1) {
-            Node<V> current = tail;
+            Node<E> current = tail;
             for (int i = 0; i < size - 1; i++) {
-                sb.append(current.previous.value).append("\n");
+                sb.append(current.previous.element).append("\n");
                 current = current.previous;
             }
-            sb.append(current.previous.value);
+            sb.append(current.previous.element);
         }
         return sb.toString();
     }
 
-    private Node<V> getNodeAt(int index) {
-        Node<V> current = head;
+    private Node<E> getNodeAt(int index) {
+        Node<E> current = head;
         for (int i = 0; i < index; i++) {
             current = current.next;
         }
         return current;
     }
 
-    private Node<V> getLastNode() {
-        Node<V> current = head;
+    private Node<E> getLastNode() {
+        Node<E> current = head;
         while (current.next != null) {
             current = current.next;
         }
@@ -200,14 +200,14 @@ public final class DoublyLinkedList<V> implements Iterable<V> {
         }
     }
 
-    private static class Node<V> {
+    private static class Node<E> {
 
-        Node<V> previous;
-        V value;
-        Node<V> next;
+        Node<E> previous;
+        E element;
+        Node<E> next;
 
-        Node(V value) {
-            this.value = value;
+        Node(E element) {
+            this.element = element;
         }
     }
 }

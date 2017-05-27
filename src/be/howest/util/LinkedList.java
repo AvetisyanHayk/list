@@ -9,9 +9,9 @@ package be.howest.util;
  *
  * @author Hayk
  */
-public final class LinkedList<V> implements List<V> {
+public final class LinkedList<E> implements List<E> {
 
-    private Node<V> head;
+    private Node<E> head;
 
     public LinkedList() {
         clear();
@@ -20,7 +20,7 @@ public final class LinkedList<V> implements List<V> {
     @Override
     public int size() {
         int size = 0;
-        Node<V> current = head;
+        Node<E> current = head;
         while (current.next != null) {
             size++;
             current = current.next;
@@ -29,10 +29,10 @@ public final class LinkedList<V> implements List<V> {
     }
 
     @Override
-    public int indexOf(V value) {
-        Node<V> current = head;
+    public int indexOf(E element) {
+        Node<E> current = head;
         for (int i = 0; i < size(); i++) {
-            if (current.next != null && value.equals(current.next.value)) {
+            if (current.next != null && element.equals(current.next.element)) {
                 return i;
             }
             current = current.next;
@@ -41,35 +41,35 @@ public final class LinkedList<V> implements List<V> {
     }
 
     @Override
-    public V get(int index) {
+    public E get(int index) {
         validateBounds(index, 0, size());
-        return getNodeAt(index).next.value;
+        return getNodeAt(index).next.element;
     }
 
     @Override
-    public void set(int index, V value) {
+    public void set(int index, E element) {
         validateBounds(index, 0, size() - 1);
         if (size() == 0) {
-            head.next = new Node<>(value);
+            head.next = new Node<>(element);
         } else {
-            getNodeAt(index).next.value = value;
+            getNodeAt(index).next.element = element;
         }
     }
 
     @Override
-    public void add(V value) {
-        getLastNode().next = new Node<>(value);
+    public void add(E element) {
+        getLastNode().next = new Node<>(element);
     }
 
     @Override
-    public void add(int index, V value) {
+    public void add(int index, E element) {
         validateBounds(index, 0, size());
         if (head == null) {
-            add(value);
+            add(element);
         } else {
-            Node<V> current = getNodeAt(index);
-            Node<V> temp = current.next;
-            current.next = new Node<>(value);
+            Node<E> current = getNodeAt(index);
+            Node<E> temp = current.next;
+            current.next = new Node<>(element);
             current.next.next = temp;
         }
     }
@@ -78,28 +78,28 @@ public final class LinkedList<V> implements List<V> {
     public void remove(int index) {
         validateBounds(index, 0, size() - 1);
         if (head != null) {
-            Node<V> current = getNodeAt(index);
+            Node<E> current = getNodeAt(index);
             current.next = current.next.next;
         }
     }
 
     @Override
-    public boolean remove(V value) {
-        int index = indexOf(value);
+    public boolean remove(E element) {
+        int index = indexOf(element);
         if (index >= 0) {
-            remove(indexOf(value));
+            remove(indexOf(element));
             return true;
         }
         return false;
     }
 
     @Override
-    public boolean removeAll(V value) {
-        int index = indexOf(value);
+    public boolean removeAll(E element) {
+        int index = indexOf(element);
         boolean removed = false;
         while (index >= 0) {
-            removed = remove(value);
-            index = indexOf(value);
+            removed = remove(element);
+            index = indexOf(element);
         }
         return removed;
     }
@@ -109,16 +109,16 @@ public final class LinkedList<V> implements List<V> {
         head = new Node<>(null);
     }
         
-    private Node<V> getNodeAt(int index) {
-        Node<V> current = head;
+    private Node<E> getNodeAt(int index) {
+        Node<E> current = head;
         for (int i = 0; i < index; i++) {
             current = current.next;
         }
         return current;
     }
     
-    private Node<V> getLastNode() {
-        Node<V> current = head;
+    private Node<E> getLastNode() {
+        Node<E> current = head;
         while (current.next != null) {
             current = current.next;
         }
@@ -131,13 +131,13 @@ public final class LinkedList<V> implements List<V> {
         }
     }
 
-    private static class Node<V> {
+    private static class Node<E> {
 
-        V value;
-        Node<V> next;
+        E element;
+        Node<E> next;
 
-        Node(V value) {
-            this.value = value;
+        Node(E element) {
+            this.element = element;
         }
     }
 }
