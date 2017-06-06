@@ -43,7 +43,11 @@ public final class LinkedList<E> implements List<E> {
     @Override
     public E get(int index) {
         validateBounds(index, 0, size());
-        return getNodeAt(index).next.element;
+        Node<E> node = getNodeAt(index);
+        if (node != null && node.next != null) {
+            return node.next.element;
+        }
+        return null;
     }
 
     @Override
@@ -79,7 +83,9 @@ public final class LinkedList<E> implements List<E> {
         validateBounds(index, 0, size() - 1);
         if (head != null) {
             Node<E> current = getNodeAt(index);
-            current.next = current.next.next;
+            if (current != null && current.next != null)  {
+                current.next = current.next.next;
+            }
         }
     }
 
