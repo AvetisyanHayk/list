@@ -7,7 +7,7 @@ package be.howest.util;
  */
 public final class LinkedList<E> implements List<E> {
 
-    private Node<E> head;
+    private Node<E> head = null;
 
     public LinkedList() {
         clear();

@@ -9,6 +9,7 @@ import java.util.Comparator;
  */
 public class SortedLinkedList<E> implements SortedList<E> {
 
+    private Node<E> head = null;
     private Comparator<E> comparator;
 
     public SortedLinkedList() {
@@ -77,5 +78,20 @@ public class SortedLinkedList<E> implements SortedList<E> {
     @Override
     public Comparator<E> getComparator() {
         return comparator;
+    }
+    
+    private static class Node<E> {
+
+        E element;
+        Node<E> next;
+
+        Node(E element) {
+            this(element, null);
+        }
+
+        Node(E element, Node<E> next) {
+            this.element = element;
+            this.next = next;
+        }
     }
 }
