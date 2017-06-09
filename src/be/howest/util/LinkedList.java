@@ -8,6 +8,7 @@ package be.howest.util;
 /**
  *
  * @author Hayk
+ * @param <E>
  */
 public final class LinkedList<E> implements List<E> {
 
@@ -16,12 +17,12 @@ public final class LinkedList<E> implements List<E> {
     public LinkedList() {
         clear();
     }
-    
+
     @Override
     public int size() {
         int size = 0;
         Node<E> current = head;
-        while (current.next != null) {
+        while (current != null) {
             size++;
             current = current.next;
         }
@@ -32,7 +33,7 @@ public final class LinkedList<E> implements List<E> {
     public int indexOf(E element) {
         Node<E> current = head;
         for (int i = 0; i < size(); i++) {
-            if (current.next != null && element.equals(current.next.element)) {
+            if (element.equals(current.element)) {
                 return i;
             }
             current = current.next;
@@ -42,50 +43,57 @@ public final class LinkedList<E> implements List<E> {
 
     @Override
     public E get(int index) {
-        validateBounds(index, 0, size());
-        Node<E> node = getNodeAt(index);
-        if (node != null && node.next != null) {
-            return node.next.element;
+        validateBounds(index, 0, size() - 1);
+        Node<E> node = head;
+        for (int i = 0; i < index; i++) {
+            node = node.next;
         }
-        return null;
+        return node.element;
     }
 
     @Override
     public void set(int index, E element) {
         validateBounds(index, 0, size() - 1);
-        if (size() == 0) {
-            head.next = new Node<>(element);
-        } else {
-            getNodeAt(index).next.element = element;
-        }
+        Node<E> node = getNodeAt(index);
+        node.element = element;
     }
 
     @Override
     public void add(E element) {
-        getLastNode().next = new Node<>(element);
+        if (head == null) {
+            head = new Node<>(element);
+        } else {
+            add(element, head);
+        }
+    }
+
+    private void add(E element, Node<E> node) {
+        if (node.next == null) {
+            node.next = new Node<>(element);
+        } else {
+            add(element, node.next);
+        }
     }
 
     @Override
     public void add(int index, E element) {
         validateBounds(index, 0, size());
-        if (head == null) {
-            add(element);
+        if (index == 0) {
+            head = new Node(element, head);
         } else {
-            Node<E> current = getNodeAt(index);
-            Node<E> temp = current.next;
-            current.next = new Node<>(element);
-            current.next.next = temp;
+            Node<E> node = getNodeAt(index - 1);
+            node.next = new Node(element, node.next);
         }
     }
 
     @Override
     public void remove(int index) {
         validateBounds(index, 0, size() - 1);
-        if (head != null) {
-            Node<E> current = getNodeAt(index);
-            if (current != null && current.next != null)  {
-                current.next = current.next.next;
-            }
+        if (index == 0) {
+            head = head.next;
+        } else {
+            Node<E> node = getNodeAt(index - 1);
+            node.next = node.next.next;
         }
     }
 
@@ -112,9 +120,9 @@ public final class LinkedList<E> implements List<E> {
 
     @Override
     public void clear() {
-        head = new Node<>(null);
+        head = null;
     }
-        
+
     private Node<E> getNodeAt(int index) {
         Node<E> current = head;
         for (int i = 0; i < index; i++) {
@@ -122,18 +130,13 @@ public final class LinkedList<E> implements List<E> {
         }
         return current;
     }
-    
-    private Node<E> getLastNode() {
-        Node<E> current = head;
-        while (current.next != null) {
-            current = current.next;
-        }
-        return current;
-    }
-    
+
     private void validateBounds(int index, int minIndex, int maxIndex) {
-        if (index < minIndex || index > maxIndex) {
-            throw new IndexOutOfBoundsException();
+        if (index < minIndex) {
+            throw new IndexOutOfBoundsException("Index " + index + " is lower than minIndex " + minIndex);
+        }
+        if (index > maxIndex) {
+            throw new IndexOutOfBoundsException("Index " + index + " is higher than maxIndex " + maxIndex);
         }
     }
 
@@ -143,7 +146,12 @@ public final class LinkedList<E> implements List<E> {
         Node<E> next;
 
         Node(E element) {
+            this(element, null);
+        }
+
+        Node(E element, Node<E> next) {
             this.element = element;
+            this.next = next;
         }
     }
 }
