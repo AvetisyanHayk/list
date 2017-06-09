@@ -1,13 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package be.howest.util;
 
 /**
  *
  * @author Hayk
+ * @param <E>
  */
 public final class DoublyLinkedList<E> implements Iterable<E> {
 
@@ -19,10 +15,16 @@ public final class DoublyLinkedList<E> implements Iterable<E> {
     }
 
     @Override
+    public void clear() {
+        head = null;
+        tail = null;
+    }
+
+    @Override
     public int size() {
         int size = 0;
         Node<E> current = head;
-        while (current.next != null) {
+        while (current != null) {
             size++;
             current = current.next;
         }
@@ -31,12 +33,12 @@ public final class DoublyLinkedList<E> implements Iterable<E> {
 
     @Override
     public int indexOf(E element) {
-        Node<E> current = head;
+        Node<E> node = head;
         for (int i = 0; i < size(); i++) {
-            if (current.next != null && element.equals(current.next.element)) {
+            if (element.equals(node.element)) {
                 return i;
             }
-            current = current.next;
+            node = node.next;
         }
         return -1;
     }
@@ -44,38 +46,61 @@ public final class DoublyLinkedList<E> implements Iterable<E> {
     @Override
     public E get(int index) {
         validateBounds(index, 0, size());
-        return getNodeAt(index).next.element;
+        return getNodeAt(index).element;
     }
 
     @Override
     public void set(int index, E element) {
         validateBounds(index, 0, size() - 1);
-        if (size() == 0) {
-            head.next = new Node<>(element);
-            tail.previous = head.next;
-        } else {
-            getNodeAt(index).next.element = element;
-        }
+        getNodeAt(index).element = element;
     }
 
     @Override
     public void add(E element) {
-        Node<E> lastNode = getLastNode();
-        lastNode.next = new Node<>(element);
-        tail.previous = lastNode.next;
-        tail.previous.previous = lastNode;
+        addLast(element);
+    }
+
+    @Override
+    public void addFirst(E element) {
+        head = new Node<>(element, head);
+        if (size() == 1) {
+            tail = head;
+        } else {
+            head.next.previous = head;
+        }
+    }
+
+    @Override
+    public void addLast(E element) {
+        if (head == null) {
+            addFirst(element);
+        } else {
+            add(element, head);
+        }
+    }
+
+    private void add(E element, Node<E> node) {
+        if (node.next == null) {
+            node.next = new Node<>(element);
+            node.next.previous = node;
+            tail = node.next;
+        } else {
+            add(element, node.next);
+        }
     }
 
     @Override
     public void add(int index, E element) {
-        validateBounds(index, 0, size());
-        if (head == null || index == size()) {
-            add(element);
+        int size = size();
+        validateBounds(index, 0, size);
+        if (index == size) {
+            addLast(element);
+        } else if (index == 0) {
+            addFirst(element);
         } else {
-            Node<E> current = getNodeAt(index);
-            Node<E> temp = current.next;
-            current.next = new Node<>(element);
-            current.next.next = temp;
+            Node<E> node = getNodeAt(index - 1);
+            node.next = new Node<>(element, node.next, node);
+            node.next.previous = node.next;
         }
     }
 
@@ -83,17 +108,54 @@ public final class DoublyLinkedList<E> implements Iterable<E> {
     public void remove(int index) {
         int size = size();
         validateBounds(index, 0, size - 1);
-        if (head != null) {
-            Node<E> current = getNodeAt(index);
-            current.next = current.next.next;
-            if (index == size - 1) {
-                tail.previous = getLastNode().next;
-            }
+        if (index == size - 1) {
+            removeLast();
+        } else if (index == 0) {
+            removeFirst();
+        } else {
+            Node<E> node = getNodeAt(index - 1);
+            node.next = node.next.next;
+            node.next.previous = node;
         }
     }
 
     @Override
-    public boolean remove(E element) {
+    public E removeFirst() {
+        E removed = null;
+        if (head != null) {
+            removed = head.element;
+            head = head.next;
+            fixHeadAndTail();
+            if (size() <= 1) {
+                tail = head;
+            }
+        }
+        return removed;
+    }
+
+    @Override
+    public E removeLast() {
+        E removed = null;
+        if (tail != null) {
+            removed = tail.element;
+            tail = tail.previous;
+            fixHeadAndTail();
+            if (size() <= 1) {
+                head = tail;
+            }
+        }
+        return removed;
+    }
+
+    private void fixHeadAndTail() {
+        if (head != null) {
+            head.previous = null;
+            tail.next = null;
+        }
+    }
+
+    @Override
+    public synchronized boolean remove(E element) {
         int index = indexOf(element);
         if (index >= 0) {
             remove(indexOf(element));
@@ -114,67 +176,32 @@ public final class DoublyLinkedList<E> implements Iterable<E> {
     }
 
     @Override
-    public void clear() {
-        head = new Node<>(null);
-        tail = new Node<>(null);
-    }
-
-    @Override
-    public void addFirst(E element) {
-        add(0, element);
-    }
-
-    @Override
-    public void addLast(E element) {
-        add(element);
-    }
-
-    @Override
-    public E removeFirst() {
-        E element = get(0);
-        remove(0);
-        return element;
-    }
-
-    @Override
-    public E removeLast() {
-        int index = size() - 1;
-        E element = get(index);
-        remove(index);
-        return element;
-    }
-
-    @Override
     public String forwardStringVersionOfList() {
-        int size = size();
-        StringBuilder sb = new StringBuilder();
-        if (size == 1) {
-            sb.append(head.next.element);
-        } else if (size > 1) {
-            Node<E> current = head;
-            for (int i = 0; i < size - 1; i++) {
-                sb.append(current.next.element).append("\n");
-                current = current.next;
-            }
-            sb.append(tail.previous.element);
+        if (head == null) {
+            return null;
         }
+        StringBuilder sb = new StringBuilder();
+        Node<E> node = head;
+        while (node.next != null) {
+            sb.append(node.element).append("\n");
+            node = node.next;
+        }
+        sb.append(node.element);
         return sb.toString();
     }
 
     @Override
     public String backwardStringVersionOfList() {
-        int size = size();
-        StringBuilder sb = new StringBuilder();
-        if (size == 1) {
-            sb.append(tail.previous.element);
-        } else if (size > 1) {
-            Node<E> current = tail;
-            for (int i = 0; i < size - 1; i++) {
-                sb.append(current.previous.element).append("\n");
-                current = current.previous;
-            }
-            sb.append(current.previous.element);
+        if (tail == null) {
+            return null;
         }
+        StringBuilder sb = new StringBuilder();
+        Node<E> node = tail;
+        while (node.previous != null) {
+            sb.append(node.element).append("\n");
+            node = node.previous;
+        }
+        sb.append(node.element);
         return sb.toString();
     }
 
@@ -186,17 +213,12 @@ public final class DoublyLinkedList<E> implements Iterable<E> {
         return current;
     }
 
-    private Node<E> getLastNode() {
-        Node<E> current = head;
-        while (current.next != null) {
-            current = current.next;
-        }
-        return current;
-    }
-
     private void validateBounds(int index, int minIndex, int maxIndex) {
-        if (index < minIndex || index > maxIndex) {
-            throw new IndexOutOfBoundsException();
+        if (index < minIndex) {
+            throw new IndexOutOfBoundsException("Index " + index + " is lower than minIndex " + minIndex);
+        }
+        if (index > maxIndex) {
+            throw new IndexOutOfBoundsException("Index " + index + " is higher than maxIndex " + maxIndex);
         }
     }
 
@@ -207,7 +229,17 @@ public final class DoublyLinkedList<E> implements Iterable<E> {
         Node<E> next;
 
         Node(E element) {
+            this(element, null);
+        }
+
+        Node(E element, Node<E> next) {
+            this(element, next, null);
+        }
+
+        Node(E element, Node<E> next, Node<E> previous) {
             this.element = element;
+            this.next = next;
+            this.previous = previous;
         }
     }
 }
