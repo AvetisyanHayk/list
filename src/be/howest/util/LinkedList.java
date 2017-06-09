@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package be.howest.util;
 
 /**
@@ -31,12 +26,12 @@ public final class LinkedList<E> implements List<E> {
 
     @Override
     public int indexOf(E element) {
-        Node<E> current = head;
+        Node<E> node = head;
         for (int i = 0; i < size(); i++) {
-            if (element.equals(current.element)) {
+            if (element.equals(node.element)) {
                 return i;
             }
-            current = current.next;
+            node = node.next;
         }
         return -1;
     }
@@ -44,18 +39,13 @@ public final class LinkedList<E> implements List<E> {
     @Override
     public E get(int index) {
         validateBounds(index, 0, size() - 1);
-        Node<E> node = head;
-        for (int i = 0; i < index; i++) {
-            node = node.next;
-        }
-        return node.element;
+        return getNodeAt(index).element;
     }
 
     @Override
     public void set(int index, E element) {
         validateBounds(index, 0, size() - 1);
-        Node<E> node = getNodeAt(index);
-        node.element = element;
+        getNodeAt(index).element = element;
     }
 
     @Override
@@ -79,10 +69,10 @@ public final class LinkedList<E> implements List<E> {
     public void add(int index, E element) {
         validateBounds(index, 0, size());
         if (index == 0) {
-            head = new Node(element, head);
+            head = new Node<>(element, head);
         } else {
             Node<E> node = getNodeAt(index - 1);
-            node.next = new Node(element, node.next);
+            node.next = new Node<>(element, node.next);
         }
     }
 
