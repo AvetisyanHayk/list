@@ -155,7 +155,7 @@ public final class DoublyLinkedList<E> implements Iterable<E> {
     }
 
     @Override
-    public synchronized boolean remove(E element) {
+    public boolean remove(E element) {
         int index = indexOf(element);
         if (index >= 0) {
             remove(indexOf(element));
